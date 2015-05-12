@@ -1,0 +1,46 @@
+﻿<Page
+    x:Class="XBind.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:XBindPoC"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    xmlns:m="using:XBind.Model"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="ModelTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Name}"/>
+                <TextBlock Margin="12,0,0,0" Text="{Binding SurName}"/>
+                <TextBlock Margin="12,0,0,0" Text="{Binding Age}"/>
+                <Button Margin="12,0,0,0" Command="{Binding AgeIncrease}" Content="Age Increase"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="XBModelTemplate" x:DataType="m:XBModel">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Bind Name}"/>
+                <TextBlock Margin="12,0,0,0" Text="{x:Bind SurName}"/>
+                <TextBlock Margin="12,0,0,0" Text="{x:Bind Age}"/>
+                <Button Margin="12,0,0,0" Command="{x:Bind AgeIncrease}" Content="Age Increase"/>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel Margin="24">
+            <TextBlock Text="Using Binding"/>
+            <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+                <TextBlock Text="{Binding StringProp}"/>
+                <TextBlock Margin="24,0,0,0" Text="{Binding TimeProp, Mode=OneWay}"/>
+            </StackPanel>
+            <ListView ItemsSource="{Binding ModelItems}" ItemTemplate="{StaticResource ModelTemplate}"/>
+            <TextBlock Margin="0,12,0,0" Text="Using x:Bind"/>
+            <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+                <TextBlock Text="{x:Bind StringProp}"/>
+                <TextBlock Margin="24,0,0,0" Text="{x:Bind XBTimeProp, Mode=OneWay}"/>
+            </StackPanel>
+            <ListView ItemsSource="{x:Bind XBModelItems}" ItemTemplate="{StaticResource XBModelTemplate}"/>
+        </StackPanel>
+    </Grid>
+</Page>
