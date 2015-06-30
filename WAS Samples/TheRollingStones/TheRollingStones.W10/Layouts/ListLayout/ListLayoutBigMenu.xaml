@@ -1,0 +1,33 @@
+<local:MediumSizeListLayout
+    x:Class="TheRollingStones.Layouts.ListLayoutBigMenu"
+    x:Name="root"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TheRollingStones.Layouts"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:was_controls="using:AppStudio.Common.Controls"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <Grid x:Name="main">
+        <was_controls:ResponsiveGridView
+            x:Name="responsiveGridView"
+            VerticalScroll="Enabled"
+            ItemsSource="{Binding ItemsSource, ElementName=root}"
+            ItemClickCommand="{Binding ItemClickCommand, ElementName=root}"
+            ItemHeight="{Binding ItemHeight, ElementName=root}">
+            <was_controls:ResponsiveGridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="{Binding ItemHeight, ElementName=root}">
+                        <RelativePanel Margin="{Binding ItemMargin, ElementName=root}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Image x:Name="image" Source="{Binding Image}" Stretch="Uniform" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" Height="{Binding ImageHeight, ElementName=root}"/>
+                            <TextBlock Text="{Binding Title}" Style="{StaticResource TitleStyle}" RelativePanel.Below="image" RelativePanel.AlignHorizontalCenterWithPanel="True" Margin="{Binding MenuMargin, ElementName=root}" FontSize="{Binding TitleFontSize, ElementName=root}" MaxLines="{Binding TitleMaxLines, ElementName=root}"/>
+                        </RelativePanel>
+                    </Grid>
+                </DataTemplate>
+            </was_controls:ResponsiveGridView.ItemTemplate>
+        </was_controls:ResponsiveGridView>
+    </Grid>
+</local:MediumSizeListLayout>

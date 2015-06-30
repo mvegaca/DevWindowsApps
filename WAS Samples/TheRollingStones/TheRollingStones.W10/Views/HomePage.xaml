@@ -1,0 +1,192 @@
+<base:PageBase
+    x:Class="TheRollingStones.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:was_actions="using:AppStudio.Common.Actions"
+    xmlns:local="using:TheRollingStones.Views"
+    xmlns:was_controls="using:AppStudio.Common.Controls"
+    xmlns:was_commands="using:AppStudio.Common.Commands"
+    xmlns:html2xaml="using:AppStudio.Common.Controls.Html2Xaml"
+    xmlns:layouts="using:TheRollingStones.Layouts"
+    xmlns:controls="using:TheRollingStones.Layouts.Controls"
+    xmlns:triggers="using:TheRollingStones.Triggers"
+    xmlns:vm="using:TheRollingStones.ViewModels"
+    xmlns:base="using:TheRollingStones"
+    DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
+    mc:Ignorable="d">
+
+    <Page.TopAppBar>
+        <was_actions:ActionsCommandBar
+            x:Name="topAppBar"
+            ActionsSource="{Binding Actions}" IsVisible="{Binding HasActions}" Foreground="{StaticResource AppBarForeground}"
+            Background="{StaticResource AppBarBackground}"
+            Width="320" HorizontalAlignment="Right">
+        </was_actions:ActionsCommandBar>
+    </Page.TopAppBar>
+    <Page.BottomAppBar>
+        <was_actions:ActionsCommandBar
+            x:Name="bottomAppBar"
+            ActionsSource="{Binding Actions}" IsVisible="{Binding HasActions}" Foreground="{StaticResource AppBarForeground}"
+            Background="{StaticResource AppBarBackground}">
+        </was_actions:ActionsCommandBar>
+    </Page.BottomAppBar>
+    <Grid>
+        <!--Background="{StaticResource AppBackground}"-->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WindowsWidthStates">
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="topAppBar.Visibility" Value="Collapsed"/>
+                        <Setter Target="marginGrid.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="MediumState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="bottomAppBar.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid x:Name="mainPanel" Background="{StaticResource AppBackground}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="marginGrid" Height="48" Visibility="{Binding HasActions, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=true, FallbackValue=Collapsed}"/>
+            <local:CustomVerticalHub Grid.Row="1" x:Uid="VerticalHub" Margin="14,0,6,0" ErrorColor="{StaticResource PageTitleForeground}" LoadingTemplateStaticHeight="3">
+                <local:CustomVerticalHub.TitleTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}" Style="{StaticResource PageTitleStyle}" Margin="10,23,12,8" TextTrimming="WordEllipsis"/>
+                    </DataTemplate>
+                </local:CustomVerticalHub.TitleTemplate>
+                <local:CustomVerticalHub.HeaderLinkStyle>
+                    <Style TargetType="HyperlinkButton">
+                        <Setter Property="Foreground" Value="{StaticResource PageTitleForeground}"/>
+                        <Setter Property="Margin" Value="0,23,18,8"/>
+                    </Style>
+                </local:CustomVerticalHub.HeaderLinkStyle>
+                <local:CustomVerticalHub.LoadingTemplate>
+                    <DataTemplate>
+                        <ProgressBar Height="3" IsIndeterminate="True" Foreground="{StaticResource PageTitleForeground}"/>
+                    </DataTemplate>
+                </local:CustomVerticalHub.LoadingTemplate>
+                <local:HeroImageSection>
+                </local:HeroImageSection>
+                <was_controls:VerticalHubSection
+                    DataContext="{Binding BestAlbums}" 
+                    HeaderLinkClickCommand="{Binding SectionHeaderClickCommand}" 
+                    HeaderLinkVisibility="Visible"
+                    ErrorVisibility="{Binding HasLoadDataErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    LoadingVisibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    d:DataContext="{d:DesignData Source=/Assets/Design/DesignData.json, Type=vm:DesignViewModel, IsDesignTimeCreatable=true}">
+                    <DataTemplate>
+                        <controls:CarouselLayout DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" RowsInFlip="1" ItemWidth="400" ItemHeight="400">
+                            <controls:CarouselLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Width="300" Height="400" Margin="10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="300"/>
+                                            <RowDefinition Height="100"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid Width="300" Height="300">
+                                            <Ellipse Width="300" Height="300">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding Image}" Stretch="UniformToFill"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <Ellipse Width="75" Height="75" Fill="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                                            <Ellipse Width="50" Height="50" Fill="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <TextBlock Style="{StaticResource TitleStyle}" Text="{Binding Title}" Grid.Row="1" HorizontalAlignment="Center" Margin="24"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:CarouselLayout.ItemTemplate>
+                        </controls:CarouselLayout>
+                        <!--<layouts:ListLayoutContactCa1rd DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" OneRowModeEnabled="True"/>-->
+                    </DataTemplate>
+                </was_controls:VerticalHubSection>
+                <was_controls:VerticalHubSection
+                    DataContext="{Binding BestAlbums}" 
+                    HeaderLinkClickCommand="{Binding SectionHeaderClickCommand}" 
+                    HeaderLinkVisibility="Visible"
+                    ErrorVisibility="{Binding HasLoadDataErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    LoadingVisibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    d:DataContext="{d:DesignData Source=/Assets/Design/DesignData.json, Type=vm:DesignViewModel, IsDesignTimeCreatable=true}">
+                    <DataTemplate>
+                        <layouts:ListLayoutContactCard DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" OneRowModeEnabled="True"/>
+                    </DataTemplate>
+                </was_controls:VerticalHubSection>
+                <was_controls:VerticalHubSection
+                    DataContext="{Binding News}" 
+                    HeaderLinkClickCommand="{Binding SectionHeaderClickCommand}" 
+                    HeaderLinkVisibility="Visible"
+                    ErrorVisibility="{Binding HasLoadDataErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    LoadingVisibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    d:DataContext="{d:DesignData Source=/Assets/Design/DesignData.json, Type=vm:DesignViewModel, IsDesignTimeCreatable=true}">
+                    <DataTemplate>
+                        <layouts:ListLayoutTextCard DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" OneRowModeEnabled="True"/>
+                    </DataTemplate>
+                </was_controls:VerticalHubSection>
+                <was_controls:VerticalHubSection
+                    DataContext="{Binding MomentsOfTour}" 
+                    HeaderLinkClickCommand="{Binding SectionHeaderClickCommand}" 
+                    HeaderLinkVisibility="Visible"
+                    ErrorVisibility="{Binding HasLoadDataErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    LoadingVisibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    d:DataContext="{d:DesignData Source=/Assets/Design/DesignData.json, Type=vm:DesignViewModel, IsDesignTimeCreatable=true}">
+                    <DataTemplate>
+                        <Grid Background="Black" Height="300">
+                            <Image Source="ms-appx:///Assets/358529-rock-guitar.jpg" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                            <layouts:ListLayoutPhoto DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" OneRowModeEnabled="True" Margin="200,0,0,0" VerticalAlignment="Bottom"/>
+                        </Grid>
+                    </DataTemplate>
+                </was_controls:VerticalHubSection>
+                <was_controls:VerticalHubSection
+                    DataContext="{Binding RollingConected}" 
+                    HeaderLinkClickCommand="{Binding SectionHeaderClickCommand}" 
+                    HeaderLinkVisibility="Collapsed"
+                    ErrorVisibility="{Binding HasLoadDataErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    LoadingVisibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    d:DataContext="{d:DesignData Source=/Assets/Design/DesignDataMenu.json, Type=vm:DesignViewModel, IsDesignTimeCreatable=true}">
+                    <DataTemplate>
+                        <layouts:ListLayoutBigMenu DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" OneRowModeEnabled="False"/>
+                    </DataTemplate>
+                </was_controls:VerticalHubSection>
+                <was_controls:VerticalHubSection                    
+                    DataContext="{Binding XboxMusic}" 
+                    HeaderLinkClickCommand="{Binding SectionHeaderClickCommand}" 
+                    HeaderLinkVisibility="Visible"
+                    ErrorVisibility="{Binding HasLoadDataErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    LoadingVisibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    d:DataContext="{d:DesignData Source=/Assets/Design/DesignData.json, Type=vm:DesignViewModel, IsDesignTimeCreatable=true}">
+                    <DataTemplate>
+                        <Grid Background="LightGray">
+                            <layouts:ListLayoutContactCard DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" OneRowModeEnabled="True"/>
+                        </Grid>
+                    </DataTemplate>
+                </was_controls:VerticalHubSection>
+                <was_controls:VerticalHubSection
+                    DataContext="{Binding TourPlan}" 
+                    HeaderLinkClickCommand="{Binding SectionHeaderClickCommand}" 
+                    HeaderLinkVisibility="Collapsed"
+                    ErrorVisibility="{Binding HasLoadDataErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    LoadingVisibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                    d:DataContext="{d:DesignData Source=/Assets/Design/DesignDataMenu.json, Type=vm:DesignViewModel, IsDesignTimeCreatable=true}">
+                    <DataTemplate>
+                        <layouts:ListLayoutSmallMenu DataContext="{Binding}" ItemsSource="{Binding Items}" ItemClickCommand="{Binding ItemClickCommand}" OneRowModeEnabled="False"/>
+                    </DataTemplate>
+                </was_controls:VerticalHubSection>
+            </local:CustomVerticalHub>
+            <controls:DataUpdateInformationControl Grid.Row="2" LastUpdateDateTime="{Binding LastUpdated}" Color="{StaticResource PageTitleForeground}" Margin="8,4,8,4" HorizontalAlignment="Left"/>
+        </Grid>
+    </Grid>
+</base:PageBase>

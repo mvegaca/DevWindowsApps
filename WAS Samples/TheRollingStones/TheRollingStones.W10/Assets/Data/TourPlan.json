@@ -1,0 +1,30 @@
+[
+  {
+    "MenuType": "DeepLink",
+    "Title": "Madrid 15.09.2015",
+    "Icon": "/Assets/DataImages/ModuleLogo-9.png",
+    "Target": "http://www.rollingstones.com",
+    "_id": "2aa35309-7acf-40e3-aa4f-44a701d69e2d"
+  },
+  {
+    "MenuType": "DeepLink",
+    "Title": "Paris 18.11.2015",
+    "Icon": "/Assets/DataImages/ModuleLogo-10.png",
+    "Target": "http://www.rollingstones.com",
+    "_id": "ca9a5f75-7086-4e43-b679-ecc6666132d4"
+  },
+  {
+    "MenuType": "DeepLink",
+    "Title": "London 18.02.2016",
+    "Icon": "/Assets/DataImages/ModuleLogo-11.png",
+    "Target": "http://www.rollingstones.com",
+    "_id": "0704e763-6075-4d90-9c9e-d14bd184c81c"
+  },
+  {
+    "MenuType": "DeepLink",
+    "Title": "Seatle 11.06.2016",
+    "Icon": "/Assets/DataImages/ModuleLogo-12.png",
+    "Target": "http://www.rollingstones.com",
+    "_id": "e850ed55-3f33-461f-aee1-44642a56638a"
+  }
+]
