@@ -22,9 +22,17 @@ namespace DevWindowsApps.Sample
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public VMTwitter Twitter;
         public MainPage()
         {
+            Twitter = new VMTwitter();
             this.InitializeComponent();
+            DataContext = Twitter;
+        }
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            await Twitter.LoadData();
         }
     }
 }
