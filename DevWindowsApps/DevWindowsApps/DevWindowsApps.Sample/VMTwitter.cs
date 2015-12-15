@@ -1,4 +1,6 @@
-﻿using AppStudio.DataProviders.Twitter;
+﻿using AppStudio.DataProviders.Exceptions;
+using AppStudio.DataProviders.Twitter;
+using AppStudio.Uwp.Navigation;
 using DevWindowsApps.UWP;
 using System;
 using System.Collections.Generic;
@@ -7,25 +9,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Notifications;
 
 namespace DevWindowsApps.Sample
 {
     public class VMTwitter : Observable
     {
-        private string _searchTerm;
-        public string SearchTerm
+        private const string TitleSymbolUser = "@";
+        private const string TitleSymbolHastag = "#";
+        private string _query;
+        private TwitterQueryType _queryType;
+        private ObservableCollection<VMTweet> _items;
+        private string _titleSymbol;        
+        public string Query
         {
-            get { return _searchTerm; }
-            set { SetProperty(ref _searchTerm, value); }
+            get { return _query; }
+            set { SetProperty(ref _query, value); }
         }
-        private ObservableCollection<TwitterSchema> _items;
-        public ObservableCollection<TwitterSchema> Items
+        public TwitterQueryType QueryType
         {
-            get { return _items; }
+            get { return _queryType; }
             set
             {
-                SetProperty(ref _items, value);                
+                SetProperty(ref _queryType, value);
+                TitleSymbol = (value == TwitterQueryType.User) ? TitleSymbolUser : TitleSymbolHastag;
             }
+        }
+        public string TitleSymbol
+        {
+            get { return _titleSymbol; }
+            set { SetProperty(ref _titleSymbol, value); }
+        }
+        public ObservableCollection<VMTweet> Items
+        {
+            get { return _items; }
+            set { SetProperty(ref _items, value); }
         }
 
         private TwitterDataProvider _dataProvider;
@@ -33,7 +51,7 @@ namespace DevWindowsApps.Sample
         private TwitterDataConfig _config;
         public VMTwitter()
         {
-            Items = new ObservableCollection<TwitterSchema>();
+            Items = new ObservableCollection<VMTweet>();
             _tokens = new TwitterOAuthTokens()
             {
                 ConsumerKey = "29TPMHBW0QcFIWvNrfWxUGmlV",
@@ -41,30 +59,82 @@ namespace DevWindowsApps.Sample
                 AccessToken = "275442106-OdbhPuGr8biRdQsHbtzNSMVvHRrX9acsLbiyYgCF",
                 AccessTokenSecret = "GA4Uw2sMgvSayjWTw9qdejB8LzNfNS2cAaQPimVDVhdIP"
             };
-            SearchTerm = "UWP";
-            _config = new TwitterDataConfig() { QueryType = TwitterQueryType.Search, Query = SearchTerm };
+            Query = "mvegaca";
+            QueryType = TwitterQueryType.User;
+            _config = new TwitterDataConfig();
             _dataProvider = new TwitterDataProvider(_tokens);
         }
         public async Task LoadData()
         {
-            if (Items.Count == 0)
+            _config.QueryType = QueryType;
+            _config.Query = Query;
+            IEnumerable<TwitterSchema> tweets;
+            try
             {
-                _config.Query = SearchTerm;
-                var tweets = await _dataProvider.LoadDataAsync(_config);
+                tweets = await _dataProvider.LoadDataAsync(_config);
+            }
+            catch (UserNotFoundException)
+            {
+                tweets = null;
+            }
+            catch (TooManyRequestsException)
+            {
+                tweets = null;
+            }
+            catch (Exception)
+            {
+                tweets = null;
+            }
+            if (tweets != null)
+            {
+                Items.Clear();
                 foreach (var tweet in tweets)
                 {
-                    Items.Add(tweet);
+                    Items.Add(new VMTweet(tweet, UserClickCommand, HashtagClickCommand));
                 }
-            }
+            }            
         }
         public ICommand RefreshCommand
         {
             get
             {
                 return new RelayCommand(async () =>
-                {
-                    Items.Clear();
+                {                    
                     await LoadData();
+                });
+            }
+        }
+        public ICommand UserClickCommand
+        {
+            get
+            {
+                return new RelayCommand<string>(async (user) =>
+                {
+                    QueryType = TwitterQueryType.User;
+                    Query = user;
+                    await LoadData();
+                });
+            }
+        }
+        public ICommand HashtagClickCommand
+        {
+            get
+            {
+                return new RelayCommand<string>(async (hashtag) =>
+                {
+                    QueryType = TwitterQueryType.Search;
+                    Query = hashtag;
+                    await LoadData();
+                });
+            }
+        }
+        public ICommand NavigateCommand
+        {
+            get
+            {
+                return new RelayCommand<string>((pageName) =>
+                {
+                    NavigationService.NavigateToPage(pageName);
                 });
             }
         }        

@@ -8,15 +8,15 @@
             <Setter.Value>
                 <ControlTemplate TargetType="local:TwitterLayout">
                     <Grid
-                        Background="{TemplateBinding LayoutBackground}" MaxWidth="400">
-                        <Grid Margin="12">
+                        Background="{TemplateBinding LayoutBackground}" MaxWidth="{TemplateBinding MaxWidth}">
+                        <Grid Margin="{TemplateBinding LayoutPadding}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Grid x:Name="imageGrid" CornerRadius="15" Height="80" Width="80" VerticalAlignment="Top"/>
                             <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                <TextBlock Margin="0,0,0,0" Text="{TemplateBinding Author}" Foreground="{TemplateBinding LayoutAccent}" FontWeight="Bold" FontSize="20"/>
+                                <TextBlock x:Name="authorName" Margin="0,0,0,0" Text="{TemplateBinding Author}" Foreground="{TemplateBinding LayoutAccent}" FontWeight="Bold" FontSize="20"/>
                                 <TextBlock Margin="0,6,0,0" x:Name="timeAgoTextBlock" Foreground="{TemplateBinding LayoutForeground}" TextWrapping="Wrap" FontWeight="ExtraLight" FontSize="18"/>
                                 <RichTextBlock Margin="0,12,0,0" x:Name="tweetRichTextBlock" Foreground="{TemplateBinding LayoutForeground}" TextWrapping="Wrap" FontSize="24"/>
                             </StackPanel>

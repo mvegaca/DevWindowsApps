@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +19,16 @@ namespace DevWindowsApps.UWP.Controls
     public sealed class TwitterLayout : Control
     {
         private static Color TwitterAccentColor = Color.FromArgb(255, 64, 153, 255);
+        private static ICommand OpenUserInBrowser = new RelayCommand<string>(async (username)=>
+        {
+            var uri = new Uri(string.Format("http://www.twitter.com/{0}", username, UriKind.Absolute));
+            await Launcher.LaunchUriAsync(uri);
+        });
+        private static ICommand OpenHashtagInBrowser = new RelayCommand<string>(async (hastag) =>
+        {
+            var uri = new Uri(string.Format("http://www.twitter.com/search?q={0}", hastag, UriKind.Absolute));
+            await Launcher.LaunchUriAsync(uri);
+        });
 
         public static readonly DependencyProperty AuthorProperty = DependencyProperty.Register("Author", typeof(string), typeof(TwitterLayout), new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty ImageProperty = DependencyProperty.Register("Image", typeof(ImageSource), typeof(TwitterLayout), new PropertyMetadata(null));
@@ -25,6 +37,9 @@ namespace DevWindowsApps.UWP.Controls
         public static readonly DependencyProperty LayoutAccentProperty = DependencyProperty.Register("LayoutAccent", typeof(Brush), typeof(TwitterLayout), new PropertyMetadata(new SolidColorBrush(TwitterAccentColor)));
         public static readonly DependencyProperty LayoutBackgroundProperty = DependencyProperty.Register("LayoutBackground", typeof(Brush), typeof(TwitterLayout), new PropertyMetadata(new SolidColorBrush(Colors.White)));
         public static readonly DependencyProperty LayoutForegroundProperty = DependencyProperty.Register("LayoutForeground", typeof(Brush), typeof(TwitterLayout), new PropertyMetadata(new SolidColorBrush(Colors.Black)));
+        public static readonly DependencyProperty LayoutPaddingProperty = DependencyProperty.Register("LayoutPadding", typeof(Thickness), typeof(TwitterLayout), new PropertyMetadata(new Thickness(12)));
+        public static readonly DependencyProperty UserClickCommandProperty = DependencyProperty.Register("UserClickCommand", typeof(ICommand), typeof(TwitterLayout), new PropertyMetadata(OpenUserInBrowser));
+        public static readonly DependencyProperty HashtagClickCommandProperty = DependencyProperty.Register("HashtagClickCommand", typeof(ICommand), typeof(TwitterLayout), new PropertyMetadata(OpenHashtagInBrowser));
 
         public string Author
         {
@@ -62,6 +77,21 @@ namespace DevWindowsApps.UWP.Controls
             get { return (Brush)GetValue(LayoutForegroundProperty); }
             set { SetValue(LayoutForegroundProperty, value); }
         }
+        public Thickness LayoutPadding
+        {
+            get { return (Thickness)GetValue(LayoutPaddingProperty); }
+            set { SetValue(LayoutPaddingProperty, value); }
+        }
+        public ICommand UserClickCommand
+        {
+            get { return (ICommand)GetValue(UserClickCommandProperty); }
+            set { SetValue(UserClickCommandProperty, value); }
+        }
+        public ICommand HashtagClickCommand
+        {
+            get { return (ICommand)GetValue(HashtagClickCommandProperty); }
+            set { SetValue(HashtagClickCommandProperty, value); }
+        }
         public TwitterLayout()
         {
             this.DefaultStyleKey = typeof(TwitterLayout);
@@ -74,6 +104,17 @@ namespace DevWindowsApps.UWP.Controls
             imageGrid.Background = new ImageBrush() { ImageSource = Image };
             var timeAgoTextBlock = base.GetTemplateChild("timeAgoTextBlock") as TextBlock;
             timeAgoTextBlock.Text = GetTimeAgoString(CreationDateTime);
+            var authorName = base.GetTemplateChild("authorName") as TextBlock;
+            authorName.Tapped += ((sender, args) =>
+            {
+                if (UserClickCommand != null && !string.IsNullOrEmpty(Author))
+                {
+                    if (UserClickCommand.CanExecute(Author))
+                    {
+                        UserClickCommand.Execute(Author);
+                    }
+                }
+            });
             var words = Tweet.Split(' ');
             if (words != null && words.Count() > 0)
             {
@@ -85,28 +126,48 @@ namespace DevWindowsApps.UWP.Controls
                     if (word.StartsWith("#"))
                     {
                         Run run = new Run();
-                        run.Text = string.Format("#{0} ", CleanUserOrHashtag(word));
+                        var hashtag = CleanUserOrHashtag(word);
+                        run.Text = string.Format("#{0} ", hashtag);
                         Hyperlink link = new Hyperlink();
                         link.Inlines.Add(run);
-                        link.NavigateUri = new Uri(string.Format("http://www.twitter.com/search?q={0}", CleanUserOrHashtag(word)), UriKind.Absolute);
+                        link.Click += ((sender, args) =>
+                        {
+                            if (HashtagClickCommand != null)
+                            {
+                                if (HashtagClickCommand.CanExecute(hashtag))
+                                {
+                                    HashtagClickCommand.Execute(hashtag);
+                                }
+                            }
+                        });
                         link.Foreground = LayoutAccent;
                         paragraph.Inlines.Add(link);
                     }
                     else if (word.StartsWith("@"))
                     {
                         Run run = new Run();
-                        run.Text = string.Format("@{0} ", CleanUserOrHashtag(word));
+                        var user = CleanUserOrHashtag(word);
+                        run.Text = string.Format("@{0} ", user);
                         Hyperlink link = new Hyperlink();
-                        link.Inlines.Add(run);
-                        link.NavigateUri = new Uri(string.Format("http://www.twitter.com/{0}", CleanUserOrHashtag(word)), UriKind.Absolute);
-                        link.Foreground = LayoutAccent;
+                        link.Inlines.Add(run);                        
+                        link.Click += ((sender, args)=>
+                        {
+                            if (UserClickCommand != null)
+                            {
+                                if (UserClickCommand.CanExecute(user))
+                                {
+                                    UserClickCommand.Execute(user);
+                                }
+                            }
+                        });
+                        link.Foreground = LayoutAccent;                                                
                         paragraph.Inlines.Add(link);
                     }
                     else
                     {
                         Run run = new Run();
-                        run.Text = string.Format("{0} ", word);
-                        paragraph.Inlines.Add(run);
+                        run.Text = string.Format("{0} ", word);                        
+                        paragraph.Inlines.Add(run);                        
                     }
                 }
                 tweetRichTextBlock.Blocks.Add(paragraph);

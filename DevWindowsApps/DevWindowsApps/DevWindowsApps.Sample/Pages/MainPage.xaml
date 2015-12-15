@@ -1,0 +1,68 @@
+﻿<Page
+    x:Class="DevWindowsApps.Sample.Pages.MainPage"
+    x:Name="root"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DevWindowsApps.Sample"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:DevWindowsApps.UWP.Controls"
+    mc:Ignorable="d">
+
+    <Grid Style="{StaticResource PageGridStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <CommandBar Foreground="White" Background="#4099FF" Grid.Row="1">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Icon="Refresh" Label="Refresh" Command="{Binding RefreshCommand}" Foreground="White"/>
+                <AppBarButton Icon="Setting" Label="Settings" Command="{Binding NavigateCommand}" CommandParameter="SettintsPage" Foreground="White"/>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+        <!--<TextBox Grid.Row="1" Text="{Binding Query, Mode=TwoWay}" HorizontalAlignment="Center" Width="400" Margin="0,12,0,0"/>-->
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Background="#4099FF" HorizontalAlignment="Stretch" Grid.Row="0" VerticalAlignment="Center">
+                    <Grid HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="800" Margin="24,12">
+                            <Image Source="ms-appx:///Assets/AppLogo.png" Stretch="Uniform" Height="40" Margin="0" VerticalAlignment="Center"/>
+                            <StackPanel Margin="18,0,0,0">
+                                <TextBlock Text="anonymous twitter" Style="{StaticResource AppTitleStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                    <TextBlock Text="{Binding TitleSymbol}" Style="{StaticResource AppTitleStyle}"/>
+                                    <TextBlock Text="{Binding Query}" Style="{StaticResource AppTitleStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" HorizontalAlignment="Center" Margin="0,12,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0">
+                                <controls:TwitterLayout
+                                MaxWidth="800"
+                                Author="{Binding UserName}"
+                                Image="{Binding UserProfileImageUrl}"
+                                Tweet="{Binding Text}"
+                                CreationDateTime="{Binding CreationDateTime}"
+                                UserClickCommand="{Binding UserClickCommand}"
+                                HashtagClickCommand="{Binding HashtagClickCommand}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>   

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppStudio.Uwp.Navigation;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,7 +33,8 @@ namespace DevWindowsApps.Sample
                 Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            this.Suspending += OnSuspending;            
+            
         }
 
         /// <summary>
@@ -75,7 +77,8 @@ namespace DevWindowsApps.Sample
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                NavigationService.Initialize(typeof(App), rootFrame);
+                NavigationService.NavigateToPage("MainPage");                
             }
             // Ensure the current window is active
             Window.Current.Activate();

@@ -1585,6 +1585,14 @@
         "runtime": {
           "lib/portable-win81+wpa81/AppStudio.DataProviders.dll": {}
         }
+      },
+      "WindowsAppStudio.Uwp/1.0.4": {
+        "compile": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-arm": {
@@ -3260,6 +3268,14 @@
         "runtime": {
           "lib/portable-win81+wpa81/AppStudio.DataProviders.dll": {}
         }
+      },
+      "WindowsAppStudio.Uwp/1.0.4": {
+        "compile": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
@@ -4906,6 +4922,14 @@
         },
         "runtime": {
           "lib/portable-win81+wpa81/AppStudio.DataProviders.dll": {}
+        }
+      },
+      "WindowsAppStudio.Uwp/1.0.4": {
+        "compile": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
         }
       }
     },
@@ -6587,6 +6611,14 @@
         "runtime": {
           "lib/portable-win81+wpa81/AppStudio.DataProviders.dll": {}
         }
+      },
+      "WindowsAppStudio.Uwp/1.0.4": {
+        "compile": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
@@ -8233,6 +8265,14 @@
         },
         "runtime": {
           "lib/portable-win81+wpa81/AppStudio.DataProviders.dll": {}
+        }
+      },
+      "WindowsAppStudio.Uwp/1.0.4": {
+        "compile": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
         }
       }
     },
@@ -9914,6 +9954,14 @@
         "runtime": {
           "lib/portable-win81+wpa81/AppStudio.DataProviders.dll": {}
         }
+      },
+      "WindowsAppStudio.Uwp/1.0.4": {
+        "compile": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
@@ -11560,6 +11608,14 @@
         },
         "runtime": {
           "lib/portable-win81+wpa81/AppStudio.DataProviders.dll": {}
+        }
+      },
+      "WindowsAppStudio.Uwp/1.0.4": {
+        "compile": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/AppStudio.Uwp.dll": {}
         }
       }
     }
@@ -14998,6 +15054,25 @@
         "package/services/metadata/core-properties/490b123d1abc46fb84d3a2f8ef54ca90.psmdcp",
         "WindowsAppStudio.DataProviders.nuspec"
       ]
+    },
+    "WindowsAppStudio.Uwp/1.0.4": {
+      "sha512": "8pewcV1le/Iqe2R7pxp67n25Jlb/b/auGvDLWUuC4vwQSK/WIh5wo7nDSGETIZWs0rM/Abde7vORALEQbmKb7Q==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "lib/uap10.0/AppStudio.Uwp.dll",
+        "lib/uap10.0/AppStudio.Uwp.pdb",
+        "lib/uap10.0/AppStudio.Uwp.pri",
+        "lib/uap10.0/AppStudio.Uwp/AppStudio.Uwp.xr.xml",
+        "lib/uap10.0/AppStudio.Uwp/Controls/ErrorNotificationControl/ErrorNotificationControl.xbf",
+        "lib/uap10.0/AppStudio.Uwp/Controls/ResponsiveGridView/ResponsiveGridView.xbf",
+        "lib/uap10.0/AppStudio.Uwp/Controls/SectionList/SectionList.xbf",
+        "lib/uap10.0/AppStudio.Uwp/Properties/AppStudio.Uwp.rd.xml",
+        "lib/uap10.0/AppStudio.Uwp/Themes/Generic.xbf",
+        "package/services/metadata/core-properties/af2f6ace5ed5471bad873a967d77718e.psmdcp",
+        "WindowsAppStudio.Uwp.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -15007,7 +15082,8 @@
       "Microsoft.ApplicationInsights.WindowsApps >= 1.0.0",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
       "Newtonsoft.Json >= 7.0.1",
-      "WindowsAppStudio.DataProviders >= 1.0.4"
+      "WindowsAppStudio.DataProviders >= 1.0.4",
+      "WindowsAppStudio.Uwp >= 1.0.4"
     ],
     "UAP,Version=v10.0": []
   }

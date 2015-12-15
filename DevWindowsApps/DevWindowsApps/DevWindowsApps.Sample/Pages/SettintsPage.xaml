@@ -1,0 +1,14 @@
+﻿<Page
+    x:Class="DevWindowsApps.Sample.Pages.SettintsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DevWindowsApps.Sample.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid Style="{StaticResource PageGridStyle}">
+        <StackPanel MaxWidth="800" HorizontalAlignment="Center" Margin="24,12">
+            <TextBlock Text="Settings" Style="{StaticResource TitleStyle}"/>
+        </StackPanel>
+    </Grid>
+</Page>
