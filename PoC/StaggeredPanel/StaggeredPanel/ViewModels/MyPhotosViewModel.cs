@@ -18,7 +18,9 @@ namespace StaggeredPanel.ViewModels
             var rnd = new Random();
             for (int i = 0; i < 50; i++)
             {
-                Images.Add($"https://picsum.photos/{rnd.Next(200, 500)}/{rnd.Next(200, 500)}");
+                var width = rnd.Next(200, 500);
+                var height = rnd.Next(200, 500);
+                Images.Add($"https://picsum.photos/{width}/{height}");
             }
         }
     }
