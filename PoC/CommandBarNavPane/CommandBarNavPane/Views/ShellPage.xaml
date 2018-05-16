@@ -1,0 +1,46 @@
+<Page
+    x:Class="CommandBarNavPane.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="using:CommandBarNavPane.Helpers"
+    xmlns:views="using:CommandBarNavPane.Views"
+    xmlns:viewsModels="using:CommandBarNavPane.ViewModels"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    mc:Ignorable="d">
+
+    <NavigationView
+        x:Name="navigationView"
+        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
+        IsSettingsVisible="True"
+        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+        <NavigationView.MenuItems>
+            <NavigationViewItem x:Uid="Shell_Main" Icon="Document" helpers:NavHelper.NavigateTo="views:MainPage"/>
+        </NavigationView.MenuItems>
+        <NavigationView.HeaderTemplate>
+            <DataTemplate x:DataType="viewsModels:ShellViewModel">
+                <CommandBar
+                    Loaded="CommandBar_Loaded"
+                    Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+                    <CommandBar.Content>
+                        <TextBlock
+                            Style="{StaticResource TitleTextBlockStyle}"
+                            Margin="12,8,0,0"
+                            VerticalAlignment="Center"
+                            Text="{x:Bind ((x:String)Selected.Content), Mode=OneWay}" />
+                    </CommandBar.Content>
+                </CommandBar>
+            </DataTemplate>
+        </NavigationView.HeaderTemplate>
+        <i:Interaction.Behaviors>
+            <ic:EventTriggerBehavior EventName="ItemInvoked">
+                <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+            </ic:EventTriggerBehavior>
+        </i:Interaction.Behaviors>
+        <Grid>
+            <Frame x:Name="shellFrame" />
+        </Grid>
+    </NavigationView>
+</Page>
